@@ -22,8 +22,9 @@ def pregunta_01():
     40
 
     """
-    return
+    return tbl0.shape[0]
 
+# print(pregunta_01())
 
 def pregunta_02():
     """
@@ -33,7 +34,9 @@ def pregunta_02():
     4
 
     """
-    return
+    return tbl0.shape[1]
+
+# print(pregunta_02())
 
 
 def pregunta_03():
@@ -50,7 +53,10 @@ def pregunta_03():
     Name: _c1, dtype: int64
 
     """
-    return
+    
+    return (tbl0["_c1"].value_counts()).sort_index()
+    
+# print(pregunta_03())
 
 
 def pregunta_04():
@@ -65,8 +71,12 @@ def pregunta_04():
     E    4.785714
     Name: _c2, dtype: float64
     """
-    return
+    tab0 = tbl0[["_c1","_c2"]]
+    tab4 = tab0.groupby("_c1").mean()
 
+    return tab4.squeeze()
+
+# print(pregunta_04())
 
 def pregunta_05():
     """
@@ -82,8 +92,11 @@ def pregunta_05():
     E    9
     Name: _c2, dtype: int64
     """
-    return
-
+    tab0 = tbl0[["_c1","_c2"]]
+    tab5 = tab0.groupby("_c1").max()
+    return tab5.squeeze()
+ 
+# print(pregunta_05())
 
 def pregunta_06():
     """
@@ -94,7 +107,15 @@ def pregunta_06():
     ['A', 'B', 'C', 'D', 'E', 'F', 'G']
 
     """
-    return
+    tab1 = tbl1[["_c4"]]
+    tab6 = tab1["_c4"].unique()
+    tab6.sort()
+    tab6.tolist()
+    tab6Upper = [x.upper() for x in tab6]
+    
+    return tab6Upper
+    
+# print(pregunta_06())
 
 
 def pregunta_07():
@@ -110,8 +131,12 @@ def pregunta_07():
     E    67
     Name: _c2, dtype: int64
     """
-    return
 
+    tab0 = tbl0[["_c1","_c2"]]
+    tab7 = tab0.groupby("_c1").sum()
+    return tab7.squeeze()
+
+# print(pregunta_07())
 
 def pregunta_08():
     """
@@ -128,8 +153,12 @@ def pregunta_08():
     39   39   E    5  1998-01-26    44
 
     """
-    return
+    tbl08 = tbl0
+    tbl08["suma"] = tbl08["_c0"] + tbl08["_c2"]
+ 
+    return tbl08
 
+# print(pregunta_08())
 
 def pregunta_09():
     """
@@ -146,8 +175,12 @@ def pregunta_09():
     39   39   E    5  1998-01-26  1998
 
     """
-    return
+    tbl09 = tbl0
+    tbl09["year"] = tbl09["_c3"].str.split("-").str[0]
 
+    return tbl09
+
+# print(pregunta_09())
 
 def pregunta_10():
     """
@@ -163,7 +196,12 @@ def pregunta_10():
     3   D                  1:2:3:5:5:7
     4   E  1:1:2:3:3:4:5:5:5:6:7:8:8:9
     """
-    return
+    tab10 = tbl0[["_c1","_c2"]]
+    tab10 = tab10.groupby("_c1")["_c2"].apply(lambda x: ":".join(map(str, x))).to_frame()
+
+    return tab10
+
+# print(pregunta_10())
 
 
 def pregunta_11():
@@ -182,7 +220,14 @@ def pregunta_11():
     38   38      d,e
     39   39    a,d,f
     """
-    return
+    tab11 = tbl1[["_c0","_c4"]]
+    tab11 = tab11.groupby("_c0")["_c4"].apply(lambda x: ",".join(map(str, x))).to_frame()
+    list4 = tab11["_c4"].apply(lambda x: ",".join(sorted(x.split(","))))
+    tab11["_c4"] = list4
+
+    return tab11.reset_index()
+
+# print(pregunta_11())
 
 
 def pregunta_12():
@@ -200,8 +245,14 @@ def pregunta_12():
     38   38                    eee:0,fff:9,iii:2
     39   39                    ggg:3,hhh:8,jjj:5
     """
-    return
+    tab12 = tbl2[["_c0","_c5a","_c5b"]]
+    tab12["_c5"] = tab12[["_c5a","_c5b"]].apply(lambda x: ":".join(map(str, x)), axis=1)
+    tab12 = tab12.groupby("_c0")["_c5"].apply(lambda x: ",".join(map(str, x))).to_frame()
+    tab12["_c5"] = tab12["_c5"].apply(lambda x: ",".join(sorted(x.split(","))))
 
+    return tab12.reset_index()
+
+# print(pregunta_12())
 
 def pregunta_13():
     """
@@ -217,4 +268,8 @@ def pregunta_13():
     E    275
     Name: _c5b, dtype: int64
     """
-    return
+    tab13 = pd.merge(tbl0, tbl2, on="_c0").groupby("_c1")["_c5b"].sum()
+
+    return tab13
+
+# print(pregunta_13())
