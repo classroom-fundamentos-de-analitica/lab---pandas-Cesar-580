@@ -198,6 +198,8 @@ def pregunta_10():
     """
     tab10 = tbl0[["_c1","_c2"]]
     tab10 = tab10.groupby("_c1")["_c2"].apply(lambda x: ":".join(map(str, x))).to_frame()
+    list10 = tab10["_c2"].apply(lambda x: ":".join(sorted(x.split(":"))))
+    tab10["_c2"] = list10
 
     return tab10
 
